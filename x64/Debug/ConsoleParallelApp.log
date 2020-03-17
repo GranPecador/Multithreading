@@ -1,0 +1,5 @@
+﻿  Lab1.cpp
+C:\Users\Lennuz\source\repos\ConsoleParallelApp\ConsoleParallelApp\Lab1.cpp(178,29): warning C4849: OpenMP 'collapse' clause ignored in 'for' directive
+C:\Users\Lennuz\source\repos\ConsoleParallelApp\ConsoleParallelApp\Lab1.cpp(234,29): warning C4849: OpenMP 'collapse' clause ignored in 'for' directive
+C:\Users\Lennuz\source\repos\ConsoleParallelApp\ConsoleParallelApp\Lab1.cpp(291,29): warning C4849: OpenMP 'collapse' clause ignored in 'for' directive
+  ConsoleParallelApp.vcxproj -> C:\Users\Lennuz\source\repos\ConsoleParallelApp\x64\Debug\ConsoleParallelApp.exe

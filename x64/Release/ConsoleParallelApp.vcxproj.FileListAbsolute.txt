@@ -1,0 +1,3 @@
+C:\Users\Lennuz\source\repos\ConsoleParallelApp\x64\Release\libiomp5md.dll
+C:\Users\Lennuz\source\repos\ConsoleParallelApp\x64\Release\libiomp5md.pdb
+C:\Users\Lennuz\source\repos\ConsoleParallelApp\x64\Release\libiompstubs5md.dll
