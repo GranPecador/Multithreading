@@ -3,7 +3,7 @@
 #include <windows.h>
 #include <omp.h>
 
-void createFileOfRandomNums(char* name, int rows, int columns);
+void createFileOfRandomNums(char* name, int64_t rows, int64_t columns);
 double** readMatrix(char* name);
 void multiMatrix(double** a, double** b, double** c);
 void multiMatrixWithParallel(double** a, double** b, double** c);
@@ -16,19 +16,19 @@ void multiMatrixWithThreeParallel_2threads(double** a, double** b, double** c);
 void multiMatrixWithOneParallel_4threads(double** a, double** b, double** c);
 void multiMatrixWithTwoParallel_4threads(double** a, double** b, double** c);
 void multiMatrixWithThreeParallel_4threads(double** a, double** b, double** c);
-void printMatrix(double** c, int rows, int columns);
-void writeMatrixInFile(char* name, double** result, int rows, int columns);
+void printMatrix(double** c, int64_t rows, int64_t columns);
+void writeMatrixInFile(char* name, double** result, int64_t rows, int64_t columns);
 double** createResultMatrixEmpty();
 double** createResultMatrixFillZero();
 void multiMatrixOneCycle(double** a, double** b, double** c);
 void multiMatrixOneCycleWithParallel(double** a, double** b, double** c);
 
 ULONGLONG dwStart;
-int rows1 = 1000;
-int columns2 = 1000;
-int inter21 = 2000;
+int64_t rows1 = 1000;
+int64_t columns2 = 1000;
+int64_t inter21 = 2000;
 
-int main(int argc, char* argv[]) {
+int main(int64_t argc, char* argv[]) {
 
 	double** a = nullptr, ** b = nullptr, ** c;
 	double** cc;
@@ -76,11 +76,11 @@ int main(int argc, char* argv[]) {
 	return (0);
 }
 
-void createFileOfRandomNums(char* name, int rows, int columns) {
+void createFileOfRandomNums(char* name, int64_t rows, int64_t columns) {
 	std::ofstream f1(name, std::ios::out | std::ios::app);
 	f1 <<rows<<" "<<columns<< std::endl;
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < columns; j++) {
+	for (int64_t i = 0; i < rows; i++) {
+		for (int64_t j = 0; j < columns; j++) {
 			f1 << (double)(rand()) / rand() << " ";
 		}
 		f1 << std::endl;
@@ -88,11 +88,11 @@ void createFileOfRandomNums(char* name, int rows, int columns) {
 	f1.close();
 }
 
-void writeMatrixInFile(char* name, double** result, int rows, int columns) {
+void writeMatrixInFile(char* name, double** result, int64_t rows, int64_t columns) {
 	std::ofstream f1(name, std::ios::out | std::ios::app);
 	f1 << rows << " " << columns << std::endl;
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < columns; j++) {
+	for (int64_t i = 0; i < rows; i++) {
+		for (int64_t j = 0; j < columns; j++) {
 			f1 << result[i][j] << " ";
 		}
 		f1 << std::endl;
@@ -102,7 +102,7 @@ void writeMatrixInFile(char* name, double** result, int rows, int columns) {
 
 double** readMatrix(char* name) {
 	std::ifstream file(name);
-	int rows, columns;
+	int64_t rows, columns;
 	double** matrix;
 	file >> rows >> columns;
 	if (name == "matrix1.txt") {
@@ -114,9 +114,9 @@ double** readMatrix(char* name) {
 		columns2 = columns;
 	}
 	matrix = new double* [rows]; 
-	for (int row = 0; row < rows; row++) {
+	for (int64_t row = 0; row < rows; row++) {
 		matrix[row] = new double [columns]; 
-		for (int column = 0; column < columns; column++) {
+		for (int64_t column = 0; column < columns; column++) {
 			file>>matrix[row][column];
 		}
 	}
@@ -126,7 +126,7 @@ double** readMatrix(char* name) {
 double** createResultMatrixEmpty() {
 	double** result;
 	result = new double* [rows1];
-	for (int row = 0; row < rows1; row++) {
+	for (int64_t row = 0; row < rows1; row++) {
 		result[row] = new double[columns2];
 	}
 	return result;
@@ -135,9 +135,9 @@ double** createResultMatrixEmpty() {
 double** createResultMatrixFillZero() {
 	double** result;
 	result = new double* [rows1];
-	for (int row = 0; row < rows1; row++) {
+	for (int64_t row = 0; row < rows1; row++) {
 		result[row] = new double[columns2];
-		for (int column = 0; column < columns2; column++) {
+		for (int64_t column = 0; column < columns2; column++) {
 			result[row][column] = 0;
 		}
 	}
@@ -147,61 +147,61 @@ double** createResultMatrixFillZero() {
 void multiMatrixOneCycle(double** a, double** b, double** c) {
 	std::cout << "Begin multiplay in one cycle" << std::endl;
 	dwStart = GetTickCount64();
-	int count = rows1 * inter21 * columns2;
-	for (int i = 0; i < count; i++) {
-		int temp = i % inter21;
-		int column = i / inter21 % columns2;
-		int row = i / (inter21 * columns2) ;
+	int64_t count = rows1 * inter21 * columns2;
+	for (int64_t i = 0; i < count; i++) {
+		int64_t temp = i % inter21;
+		int64_t column = i / inter21 % columns2;
+		int64_t row = i / (inter21 * columns2) ;
 		//std::cout << i << " " << row << " " << column << " " << temp  << std::endl;
 		c[row][column] += a[row][temp] * b[temp][column];
 	}
-	printf_s("For multiply two matrixs: %dx%d on %dx%d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
+	printf_s("For multiply two matrixs: %I64dx%I64d on %I64dx%I64d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
 }
 
 void multiMatrixOneCycleWithParallel(double** a, double** b, double** c) {
 	std::cout << "Begin multiplay in one cycle with parallel" << std::endl;
 	dwStart = GetTickCount64();
-	int count = rows1 * inter21 * columns2;
-#pragma omp parallel for reduction(+:c[row][column])
-		for (int i = 0; i < count; i++) {
-			int temp = i % inter21;
-			int column = i / inter21 % columns2;
-			int row = i / (inter21 * columns2);
+	int64_t count = rows1 * inter21 * columns2;
+#pragma omp parallel for
+		for (int64_t i = 0; i < count; i++) {
+			int64_t temp = i % inter21;
+			int64_t column = i / inter21 % columns2;
+			int64_t row = i / (inter21 * columns2);
 			//std::cout << i << " " << row << " " << column << " " << temp  << std::endl;
 			c[row][column] += a[row][temp] * b[temp][column];
 		}
 	
-	printf_s("For multiply two matrixs: %dx%d on %dx%d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
+	printf_s("For multiply two matrixs: %I64dx%I64d on %I64dx%I64d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
 }
 
 void multiMatrix(double** a, double** b, double** c) {
 	std::cout << "Begin multiplay" << std::endl;
 	dwStart = GetTickCount64();
-	for (int row = 0; row < rows1; row++) {
-		for (int column = 0; column < columns2; column++) {
+	for (int64_t row = 0; row < rows1; row++) {
+		for (int64_t column = 0; column < columns2; column++) {
 			c[row][column] = 0;
-			for (int inter = 0; inter < inter21; inter++) {
+			for (int64_t inter = 0; inter < inter21; inter++) {
 				c[row][column] += a[row][inter] * b[inter][column];
 			}
 		}
 	}
-	printf_s("For multiply two matrixs: %dx%d on %dx%d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
+	printf_s("For multiply two matrixs: %I64dx%I64d on %I64dx%I64d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
 }
 void multiMatrixWithParallel(double** a, double** b, double** c) {
 	std::cout << "Begin multiplay with parallel" << std::endl;
 	dwStart = GetTickCount64();
 #pragma omp parallel
 	{
-		for (int row = 0; row < rows1; row++) {
-			for (int column = 0; column < columns2; column++) {
+		for (int64_t row = 0; row < rows1; row++) {
+			for (int64_t column = 0; column < columns2; column++) {
 				c[row][column] = 0;
-				for (int inter = 0; inter < inter21; inter++) {
+				for (int64_t inter = 0; inter < inter21; inter++) {
 					c[row][column] += a[row][inter] * b[inter][column];
 				}
 			}
 		}
 	}
-	printf_s("For multiply two matrixs: %dx%d on %dx%d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
+	printf_s("For multiply two matrixs: %I64dx%I64d on %I64dx%I64d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
 }
 void multiMatrixWithOneParallel(double** a, double** b, double** c) {
 	std::cout << "\nBegin multiplay with OpenMP : One paralleled loop" << std::endl;
@@ -209,16 +209,16 @@ void multiMatrixWithOneParallel(double** a, double** b, double** c) {
 #pragma omp parallel
 	{
 #pragma omp for
-		for (int row = 0; row < rows1; row++) {
-			for (int column = 0; column < columns2; column++) {
+		for (int64_t row = 0; row < rows1; row++) {
+			for (int64_t column = 0; column < columns2; column++) {
 				c[row][column] = 0;
-				for (int inter = 0; inter < inter21; inter++) {
+				for (int64_t inter = 0; inter < inter21; inter++) {
 					c[row][column] += a[row][inter] * b[inter][column];
 				}
 			}
 		}
 	}
-	printf_s("For multiply two matrixs: %dx%d on %dx%d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
+	printf_s("For multiply two matrixs: %I64dx%I64d on %I64dx%I64d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
 }
 
 void multiMatrixWithTwoParallel(double** a, double** b, double** c) {
@@ -227,17 +227,17 @@ void multiMatrixWithTwoParallel(double** a, double** b, double** c) {
 #pragma omp parallel
 	{
 #pragma omp for
-		for (int row = 0; row < rows1; row++) {
+		for (int64_t row = 0; row < rows1; row++) {
 #pragma omp parallel for
-			for (int column = 0; column < columns2; column++) {
+			for (int64_t column = 0; column < columns2; column++) {
 				c[row][column] = 0;
-				for (int inter = 0; inter < inter21; inter++) {
+				for (int64_t inter = 0; inter < inter21; inter++) {
 					c[row][column] += a[row][inter] * b[inter][column];
 				}
 			}
 		}
 	}
-	printf_s("For multiply two matrixs: %dx%d on %dx%d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
+	printf_s("For multiply two matrixs: %I64dx%I64d on %I64dx%I64d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
 }
 
 void multiMatrixWithThreeParallel(double** a, double** b, double** c) {
@@ -247,19 +247,19 @@ void multiMatrixWithThreeParallel(double** a, double** b, double** c) {
 #pragma omp parallel
 	{
 #pragma omp for
-		for (int row = 0; row < rows1; row++) {
+		for (int64_t row = 0; row < rows1; row++) {
 #pragma omp parallel for
-			for (int column = 0; column < columns2; column++) {
+			for (int64_t column = 0; column < columns2; column++) {
 				double temp = 0;
 #pragma omp parallel for reduction(+:temp) schedule(static,4) 
-				for (int inter = 0; inter < inter21; inter++) {
+				for (int64_t inter = 0; inter < inter21; inter++) {
 					temp += a[row][inter] * b[inter][column];
 				}
 				c[row][column] = temp;
 			}
 		}
 	}
-	printf_s("For multiply two matrixs: %dx%d on %dx%d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
+	printf_s("For multiply two matrixs: %I64dx%I64d on %I64dx%I64d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
 }
 void multiMatrixWithOneParallel_2threads(double** a, double** b, double** c) {
 	std::cout << "\nBegin multiplay with OpenMP : One paralleled loop on 2 threads" << std::endl;
@@ -267,16 +267,16 @@ void multiMatrixWithOneParallel_2threads(double** a, double** b, double** c) {
 #pragma omp parallel num_threads(2)
 	{
 #pragma omp for
-		for (int row = 0; row < rows1; row++) {
-			for (int column = 0; column < columns2; column++) {
+		for (int64_t row = 0; row < rows1; row++) {
+			for (int64_t column = 0; column < columns2; column++) {
 				c[row][column] = 0;
-				for (int inter = 0; inter < inter21; inter++) {
+				for (int64_t inter = 0; inter < inter21; inter++) {
 					c[row][column] += a[row][inter] * b[inter][column];
 				}
 			}
 		}
 	}
-	printf_s("For multiply two matrixs: %dx%d on %dx%d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
+	printf_s("For multiply two matrixs: %I64dx%I64d on %I64dx%I64d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
 }
 
 void multiMatrixWithTwoParallel_2threads(double** a, double** b, double** c) {
@@ -285,17 +285,17 @@ void multiMatrixWithTwoParallel_2threads(double** a, double** b, double** c) {
 #pragma omp parallel num_threads(2)
 	{
 #pragma omp for
-		for (int row = 0; row < rows1; row++) {
+		for (int64_t row = 0; row < rows1; row++) {
 #pragma omp parallel for
-			for (int column = 0; column < columns2; column++) {
+			for (int64_t column = 0; column < columns2; column++) {
 				c[row][column] = 0;
-				for (int inter = 0; inter < inter21; inter++) {
+				for (int64_t inter = 0; inter < inter21; inter++) {
 					c[row][column] += a[row][inter] * b[inter][column];
 				}
 			}
 		}
 	}
-	printf_s("For multiply two matrixs: %dx%d on %dx%d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
+	printf_s("For multiply two matrixs: %I64dx%I64d on %I64dx%I64d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
 }
 
 void multiMatrixWithThreeParallel_2threads(double** a, double** b, double** c) {
@@ -304,19 +304,19 @@ void multiMatrixWithThreeParallel_2threads(double** a, double** b, double** c) {
 #pragma omp parallel num_threads(2)
 	{
 #pragma omp for
-		for (int row = 0; row < rows1; row++) {
+		for (int64_t row = 0; row < rows1; row++) {
 #pragma omp parallel for
-			for (int column = 0; column < columns2; column++) {
+			for (int64_t column = 0; column < columns2; column++) {
 				double temp = 0;
 #pragma omp parallel for reduction(+:temp) schedule(static,4)
-				for (int inter = 0; inter < inter21; inter++) {
+				for (int64_t inter = 0; inter < inter21; inter++) {
 					temp += a[row][inter] * b[inter][column];
 				}
 				c[row][column] = temp;
 			}
 		}
 	}
-	printf_s("For multiply two matrixs: %dx%d on %dx%d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
+	printf_s("For multiply two matrixs: %I64dx%I64d on %I64dx%I64d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
 }
 
 void multiMatrixWithOneParallel_4threads(double** a, double** b, double** c) {
@@ -325,16 +325,16 @@ void multiMatrixWithOneParallel_4threads(double** a, double** b, double** c) {
 #pragma omp parallel num_threads(4)
 	{
 #pragma omp for
-		for (int row = 0; row < rows1; row++) {
-			for (int column = 0; column < columns2; column++) {
+		for (int64_t row = 0; row < rows1; row++) {
+			for (int64_t column = 0; column < columns2; column++) {
 				c[row][column] = 0;
-				for (int inter = 0; inter < inter21; inter++) {
+				for (int64_t inter = 0; inter < inter21; inter++) {
 					c[row][column] += a[row][inter] * b[inter][column];
 				}
 			}
 		}
 	}
-	printf_s("For multiply two matrixs: %dx%d on %dx%d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
+	printf_s("For multiply two matrixs: %I64dx%I64d on %I64dx%I64d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
 }
 
 void multiMatrixWithTwoParallel_4threads(double** a, double** b, double** c) {
@@ -343,17 +343,17 @@ void multiMatrixWithTwoParallel_4threads(double** a, double** b, double** c) {
 #pragma omp parallel num_threads(4)
 	{
 #pragma omp for
-		for (int row = 0; row < rows1; row++) {
+		for (int64_t row = 0; row < rows1; row++) {
 #pragma omp parallel for
-			for (int column = 0; column < columns2; column++) {
+			for (int64_t column = 0; column < columns2; column++) {
 				c[row][column] = 0;
-				for (int inter = 0; inter < inter21; inter++) {
+				for (int64_t inter = 0; inter < inter21; inter++) {
 					c[row][column] += a[row][inter] * b[inter][column];
 				}
 			}
 		}
 	}
-	printf_s("For multiply two matrixs: %dx%d on %dx%d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
+	printf_s("For multiply two matrixs: %I64dx%I64d on %I64dx%I64d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
 }
 
 void multiMatrixWithThreeParallel_4threads(double** a, double** b, double** c) {
@@ -362,28 +362,28 @@ void multiMatrixWithThreeParallel_4threads(double** a, double** b, double** c) {
 #pragma omp parallel num_threads(4)
 	{
 #pragma omp for
-		for (int row = 0; row < rows1; row++) {
+		for (int64_t row = 0; row < rows1; row++) {
 #pragma omp parallel for
-			for (int column = 0; column < columns2; column++) {
+			for (int64_t column = 0; column < columns2; column++) {
 				double temp = 0;
 #pragma omp parallel for reduction(+:temp) schedule(static, 4)
-				for (int inter = 0; inter < inter21; inter++) {
+				for (int64_t inter = 0; inter < inter21; inter++) {
 					temp += a[row][inter] * b[inter][column];
 				}
 				c[row][column] = temp;
 			}
 		}
 	}
-	printf_s("For multiply two matrixs: %dx%d on %dx%d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
+	printf_s("For multiply two matrixs: %I64dx%I64d on %I64dx%I64d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
 }
 
-void printMatrix(double** c, int rows, int columns) {
+void printMatrix(double** c, int64_t rows, int64_t columns) {
 	// Вывод матрицы произведения
 
 	std::cout << "Матрица" << std::endl;
-	for (int i = 0; i < rows; i++)
+	for (int64_t i = 0; i < rows; i++)
 	{
-		for (int j = 0; j < columns; j++)
+		for (int64_t j = 0; j < columns; j++)
 			std::cout << c[i][j] << " ";
 		std::cout << std::endl;
 	}
