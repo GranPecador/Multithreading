@@ -25,8 +25,8 @@ void multiMatrixOneCycleWithParallel(double** a, double** b, double** c);
 
 ULONGLONG dwStart;
 int rows1 = 1000;
-int columns2 = 2000;
-int inter21 = 3000;
+int columns2 = 1000;
+int inter21 = 2000;
 
 int main(int argc, char* argv[]) {
 
@@ -42,7 +42,6 @@ int main(int argc, char* argv[]) {
 	// ¬вод элементов первой матрицы
 	b = readMatrix((char*)"matrix2.txt");
 	//printMatrix(b, inter21, columns2);
-	omp_set_nested(1);
 	cc = createResultMatrixFillZero();
 	multiMatrixOneCycle(a, b, cc);
 	writeMatrixInFile((char*)"resultOneCycle.txt", cc, rows1, columns2);
@@ -51,10 +50,10 @@ int main(int argc, char* argv[]) {
 	writeMatrixInFile((char*)"resultOneCycleParallel.txt", cc, rows1, columns2);
 
 	c = createResultMatrixEmpty();
-	//multiMatrix(a,b, c);
-	//writeMatrixInFile((char*)"result.txt", c, rows1, columns2);
-	//multiMatrixWithParallel(a, b, c);
-	//writeMatrixInFile((char*)"result0.txt", c, rows1, columns2);
+	multiMatrix(a,b, c);
+	writeMatrixInFile((char*)"result.txt", c, rows1, columns2);
+	multiMatrixWithParallel(a, b, c);
+	writeMatrixInFile((char*)"result0.txt", c, rows1, columns2);
 	//multiMatrixWithOneParallel(a, b, c);
 	//writeMatrixInFile((char*)"result1.txt", c, rows1, columns2);
 	//multiMatrixWithTwoParallel(a, b, c);
@@ -146,64 +145,32 @@ double** createResultMatrixFillZero() {
 }
 
 void multiMatrixOneCycle(double** a, double** b, double** c) {
-	std::cout << "Begin multiplay" << std::endl;
+	std::cout << "Begin multiplay in one cycle" << std::endl;
 	dwStart = GetTickCount64();
-	int row1 = 0;
-	int column2 = 0;
-	int inter = 0;
-	int rowCurrentIndex = 0;
-	int columnCurrentIndex = 0;
-	while(true){
-				c[rowCurrentIndex][columnCurrentIndex] += a[row1][inter] * b[inter][column2];
-				inter++;
-				if (inter >= inter21) {
-					inter = 0;
-					columnCurrentIndex++;
-					column2++;
-					if (column2 >= columns2) {
-						column2 = 0;
-						rowCurrentIndex++;
-						columnCurrentIndex = 0;
-						row1++;
-						if (row1 >= rows1) {
-							break;
-						}
-					}
-				}
-
+	int count = rows1 * inter21 * columns2;
+	for (int i = 0; i < count; i++) {
+		int temp = i % inter21;
+		int column = i / inter21 % columns2;
+		int row = i / (inter21 * columns2) ;
+		//std::cout << i << " " << row << " " << column << " " << temp  << std::endl;
+		c[row][column] += a[row][temp] * b[temp][column];
 	}
 	printf_s("For multiply two matrixs: %dx%d on %dx%d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
 }
 
 void multiMatrixOneCycleWithParallel(double** a, double** b, double** c) {
-	std::cout << "Begin multiplay" << std::endl;
+	std::cout << "Begin multiplay in one cycle with parallel" << std::endl;
 	dwStart = GetTickCount64();
-	int row1 = 0;
-	int column2 = 0;
-	int inter = 0;
-	int currentIndex = 0;
-	int rowCurrentIndex = 0;
-	int columnCurrentIndex = 0;
-#pragma omp parallel
-	while (true) {
-		c[rowCurrentIndex][columnCurrentIndex] += a[row1][inter] * b[inter][column2];
-		inter++;
-		if (inter >= inter21) {
-			inter = 0;
-			columnCurrentIndex++;
-			column2++;
-			if (column2 >= columns2) {
-				column2 = 0;
-				rowCurrentIndex++;
-				columnCurrentIndex = 0;
-				row1++;
-				if (row1 >= rows1) {
-					break;
-				}
-			}
+	int count = rows1 * inter21 * columns2;
+#pragma omp parallel for reduction(+:c[row][column])
+		for (int i = 0; i < count; i++) {
+			int temp = i % inter21;
+			int column = i / inter21 % columns2;
+			int row = i / (inter21 * columns2);
+			//std::cout << i << " " << row << " " << column << " " << temp  << std::endl;
+			c[row][column] += a[row][temp] * b[temp][column];
 		}
-
-	}
+	
 	printf_s("For multiply two matrixs: %dx%d on %dx%d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
 }
 
