@@ -18,20 +18,21 @@ void multiMatrixWithTwoParallel_4threads(double** a, double** b, double** c);
 void multiMatrixWithThreeParallel_4threads(double** a, double** b, double** c);
 void printMatrix(double** c, int64_t rows, int64_t columns);
 void writeMatrixInFile(char* name, double** result, int64_t rows, int64_t columns);
+void writeMatrixInFile(char* name, double* result, int64_t rows, int64_t columns);
 double** createResultMatrixEmpty();
-double** createResultMatrixFillZero();
-void multiMatrixOneCycle(double** a, double** b, double** c);
-void multiMatrixOneCycleWithParallel(double** a, double** b, double** c);
+double* createResultMatrixFillZero();
+void multiMatrixOneCycle(double** a, double** b, double* c);
+void multiMatrixOneCycleWithParallel(double** a, double** b, double* c);
 
 ULONGLONG dwStart;
-int64_t rows1 = 1000;
-int64_t columns2 = 1000;
-int64_t inter21 = 2000;
+int64_t rows1 = 10000;
+int64_t columns2 = 10000;
+int64_t inter21 = 6000;
 
 int main(int64_t argc, char* argv[]) {
 
 	double** a = nullptr, ** b = nullptr, ** c;
-	double** cc;
+	double* cc;
 
 	//createFileOfRandomNums((char*)("matrix1.txt"), rows1, inter21);
 	//createFileOfRandomNums((char*)("matrix2.txt"), inter21, columns2);
@@ -100,6 +101,18 @@ void writeMatrixInFile(char* name, double** result, int64_t rows, int64_t column
 	f1.close();
 }
 
+void writeMatrixInFile(char* name, double* result, int64_t rows, int64_t columns) {
+	std::ofstream f1(name, std::ios::out | std::ios::app);
+	f1 << rows << " " << columns << std::endl;
+	for (int64_t i = 0; i < rows*columns; i++) {
+		f1 << result[i] << " ";
+		if (i % columns == 9) {
+			f1 << std::endl;
+		}
+	}
+	f1.close();
+}
+
 double** readMatrix(char* name) {
 	std::ifstream file(name);
 	int64_t rows, columns;
@@ -132,19 +145,16 @@ double** createResultMatrixEmpty() {
 	return result;
 }
 
-double** createResultMatrixFillZero() {
-	double** result;
-	result = new double* [rows1];
-	for (int64_t row = 0; row < rows1; row++) {
-		result[row] = new double[columns2];
-		for (int64_t column = 0; column < columns2; column++) {
-			result[row][column] = 0;
-		}
+double* createResultMatrixFillZero() {
+	double* result;
+	result = new double [rows1* columns2];
+	for (int64_t i = 0; i < rows1 * columns2; i++) {
+			result[i] = 0;
 	}
 	return result;
 }
 
-void multiMatrixOneCycle(double** a, double** b, double** c) {
+void multiMatrixOneCycle(double** a, double** b, double* c) {
 	std::cout << "Begin multiplay in one cycle" << std::endl;
 	dwStart = GetTickCount64();
 	int64_t count = rows1 * inter21 * columns2;
@@ -153,12 +163,12 @@ void multiMatrixOneCycle(double** a, double** b, double** c) {
 		int64_t column = i / inter21 % columns2;
 		int64_t row = i / (inter21 * columns2) ;
 		//std::cout << i << " " << row << " " << column << " " << temp  << std::endl;
-		c[row][column] += a[row][temp] * b[temp][column];
+		c[row*columns2+column] += a[row][temp] * b[temp][column];
 	}
 	printf_s("For multiply two matrixs: %I64dx%I64d on %I64dx%I64d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
 }
 
-void multiMatrixOneCycleWithParallel(double** a, double** b, double** c) {
+void multiMatrixOneCycleWithParallel(double** a, double** b, double* c) {
 	std::cout << "Begin multiplay in one cycle with parallel" << std::endl;
 	dwStart = GetTickCount64();
 	int64_t count = rows1 * inter21 * columns2;
@@ -168,7 +178,7 @@ void multiMatrixOneCycleWithParallel(double** a, double** b, double** c) {
 			int64_t column = i / inter21 % columns2;
 			int64_t row = i / (inter21 * columns2);
 			//std::cout << i << " " << row << " " << column << " " << temp  << std::endl;
-			c[row][column] += a[row][temp] * b[temp][column];
+			c[row * columns2 + column] += a[row][temp] * b[temp][column];
 		}
 	
 	printf_s("For multiply two matrixs: %I64dx%I64d on %I64dx%I64d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
