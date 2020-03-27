@@ -58,12 +58,6 @@ int main(int64_t argc, char* argv[]) {
 	//writeMatrixInFile((char*)"result2.txt", c, rows1, columns2);
 	//multiMatrixWithThreeParallel(a, b, c);
 	//writeMatrixInFile((char*)"result3.txt", c, rows1, columns2);
-	//multiMatrixWithOneParallel_2threads(a, b, c);
-	//writeMatrixInFile((char*)"result4.txt", c, rows1, columns2);
-	//multiMatrixWithTwoParallel_2threads(a, b, c);
-	//writeMatrixInFile((char*)"result5.txt", c, rows1, columns2);
-	//multiMatrixWithThreeParallel_2threads(a, b, c);
-	//writeMatrixInFile((char*)"result6.txt", c, rows1, columns2);
 	//multiMatrixWithOneParallel_4threads(a, b, c);
 	//writeMatrixInFile((char*)"result7.txt", c, rows1, columns2);
 	//multiMatrixWithTwoParallel_4threads(a, b, c);
