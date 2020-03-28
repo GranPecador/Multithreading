@@ -22,23 +22,23 @@ void multiMatrixOneCycle(double** a, double** b, double* c);
 void multiMatrixOneCycleWithParallel(double** a, double** b, double* c);
 
 ULONGLONG dwStart;
-int64_t rows1 = 10000;
-int64_t columns2 = 10000;
-int64_t inter21 = 6000;
+int64_t rows1 = 1000;
+int64_t columns2 = 1500;
+int64_t inter21 = 2000;
 
 int main(int64_t argc, char* argv[]) {
 
 	double** a = nullptr, ** b = nullptr, ** c;
 	double* cc;
 
-	//createFileOfRandomNums((char*)("matrix1.txt"), rows1, inter21);
-	//createFileOfRandomNums((char*)("matrix2.txt"), inter21, columns2);
+	//createFileOfRandomNums((char*)("matrix10002000.txt"), rows1, inter21);
+	//createFileOfRandomNums((char*)("matrix15002000.txt"), inter21, columns2);
 
 	// ¬вод элементов первой матрицы
-	a = readMatrix((char*)"matrix1.txt");
+	a = readMatrix((char*)"matrix10002000.txt");
 	//printMatrix(a, rows1, inter21);
 	// ¬вод элементов первой матрицы
-	b = readMatrix((char*)"matrix2.txt");
+	b = readMatrix((char*)"matrix15002000.txt");
 	//printMatrix(b, inter21, columns2);
 	cc = createResultMatrixFillZero();
 	multiMatrixOneCycle(a, b, cc);
@@ -163,13 +163,16 @@ void multiMatrixOneCycleWithParallel(double** a, double** b, double* c) {
 	std::cout << "Begin multiplay in one cycle with parallel" << std::endl;
 	dwStart = GetTickCount64();
 	int64_t count = rows1 * inter21 * columns2;
-#pragma omp parallel for
+#pragma omp parallel for schedule(runtime) 
 		for (int64_t i = 0; i < count; i++) {
+			//std::cout << "thread: " << omp_get_thread_num() << std::endl;
 			int64_t temp = i % inter21;
 			int64_t column = i / inter21 % columns2;
 			int64_t row = i / (inter21 * columns2);
 			//std::cout << i << " " << row << " " << column << " " << temp  << std::endl;
-			c[row * columns2 + column] += a[row][temp] * b[temp][column];
+			double multi = a[row][temp] * b[temp][column];
+#pragma omp critical
+			c[row * columns2 + column] += multi;
 		}
 	
 	printf_s("For multiply two matrixs: %I64dx%I64d on %I64dx%I64d, spent %I64d milliseconds\n", rows1, inter21, inter21, columns2, (GetTickCount64() - dwStart));
