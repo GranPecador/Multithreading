@@ -11,3 +11,119 @@ ONE THREAD MODE: 1000x2000 on 2000x1500, spent 23703 milliseconds
 STATIC MODE (chunk size = 20) : 5000x6000 on 6000x5500, spent 958516 milliseconds
 GUIDED MODE (chunk size = 300) : 5000x6000 on 6000x5500, spent 1001031 milliseconds
 ONE THREAD MODE: 5000x6000 on 6000x5500, spent 1624328 milliseconds
+ONE THREAD MODE: 5000x6000 on 6000x5500, spent 1756172 milliseconds
+ONE THREAD MODE: 5000x6000 on 6000x5500, spent 1871297 milliseconds
+ONE THREAD MODE: 5000x6000 on 6000x5500, spent 1823172 milliseconds
+ONE THREAD MODE: 5000x6000 on 6000x5500, spent 1872343 milliseconds
+STATIC MODE (chunk size = 20) : 5000x6000 on 6000x5500, spent 932438 milliseconds
+STATIC MODE (chunk size = 20) : 5000x6000 on 6000x5500, spent 909875 milliseconds
+STATIC MODE (chunk size = 20) : 5000x6000 on 6000x5500, spent 919015 milliseconds
+STATIC MODE (chunk size = 20) : 5000x6000 on 6000x5500, spent 927219 milliseconds
+DYNAMIC MODE (chunk size = 20) : 5000x6000 on 6000x5500, spent 926547 milliseconds
+DYNAMIC MODE (chunk size = 20) : 5000x6000 on 6000x5500, spent 939047 milliseconds
+DYNAMIC MODE (chunk size = 20) : 5000x6000 on 6000x5500, spent 929437 milliseconds
+DYNAMIC MODE (chunk size = 20) : 5000x6000 on 6000x5500, spent 927656 milliseconds
+DYNAMIC MODE (chunk size = 20) : 5000x6000 on 6000x5500, spent 935891 milliseconds
+GUIDED MODE (chunk size = 300) : 5000x6000 on 6000x5500, spent 964359 milliseconds
+GUIDED MODE (chunk size = 300) : 5000x6000 on 6000x5500, spent 943234 milliseconds
+GUIDED MODE (chunk size = 300) : 5000x6000 on 6000x5500, spent 934734 milliseconds
+GUIDED MODE (chunk size = 300) : 5000x6000 on 6000x5500, spent 941578 milliseconds
+ONE THREAD MODE: 1000x2000 on 2000x1500, spent 23187 milliseconds
+ONE THREAD MODE: 1000x2000 on 2000x1500, spent 20469 milliseconds
+ONE THREAD MODE: 1000x2000 on 2000x1500, spent 19453 milliseconds
+STATIC MODE (chunk size = 1) : 1000x2000 on 2000x1500, spent 14156 milliseconds
+STATIC MODE (chunk size = 1) : 1000x2000 on 2000x1500, spent 14562 milliseconds
+STATIC MODE (chunk size = 1) : 1000x2000 on 2000x1500, spent 13985 milliseconds
+STATIC MODE (chunk size = 1) : 1000x2000 on 2000x1500, spent 14000 milliseconds
+DYNAMIC MODE (chunk size = 1) : 1000x2000 on 2000x1500, spent 16063 milliseconds
+DYNAMIC MODE (chunk size = 1) : 1000x2000 on 2000x1500, spent 15797 milliseconds
+DYNAMIC MODE (chunk size = 1) : 1000x2000 on 2000x1500, spent 15765 milliseconds
+DYNAMIC MODE (chunk size = 1) : 1000x2000 on 2000x1500, spent 15063 milliseconds
+GUIDED MODE (chunk size = 20) : 1000x2000 on 2000x1500, spent 16000 milliseconds
+GUIDED MODE (chunk size = 20) : 1000x2000 on 2000x1500, spent 15234 milliseconds
+GUIDED MODE (chunk size = 20) : 1000x2000 on 2000x1500, spent 15609 milliseconds
+GUIDED MODE (chunk size = 20) : 1000x2000 on 2000x1500, spent 15406 milliseconds
+ONE THREAD MODE: 5x4 on 4x6, spent 0 milliseconds
+STATIC MODE (chunk size = 1) : 5x4 on 4x6, spent 0 milliseconds
+STATIC MODE (chunk size = 1) : 5x4 on 4x6, spent 0 milliseconds
+STATIC MODE (chunk size = 1) : 5x4 on 4x6, spent 0 milliseconds
+STATIC MODE (chunk size = 1) : 5x4 on 4x6, spent 0 milliseconds
+STATIC MODE (chunk size = 1) : 5x4 on 4x6, spent 16 milliseconds
+DYNAMIC MODE (chunk size = 1) : 5x4 on 4x6, spent 16 milliseconds
+DYNAMIC MODE (chunk size = 1) : 5x4 on 4x6, spent 15 milliseconds
+DYNAMIC MODE (chunk size = 1) : 5x4 on 4x6, spent 0 milliseconds
+DYNAMIC MODE (chunk size = 1) : 5x4 on 4x6, spent 0 milliseconds
+DYNAMIC MODE (chunk size = 1) : 5x4 on 4x6, spent 16 milliseconds
+DYNAMIC MODE (chunk size = 1) : 5x4 on 4x6, spent 0 milliseconds
+GUIDED MODE (chunk size = 4) : 5x4 on 4x6, spent 0 milliseconds
+GUIDED MODE (chunk size = 4) : 5x4 on 4x6, spent 16 milliseconds
+GUIDED MODE (chunk size = 4) : 5x4 on 4x6, spent 0 milliseconds
+GUIDED MODE (chunk size = 4) : 5x4 on 4x6, spent 15 milliseconds
+GUIDED MODE (chunk size = 4) : 5x4 on 4x6, spent 0 milliseconds
+ONE THREAD MODE: 1x8000 on 8000x1, spent 0 milliseconds
+ONE THREAD MODE: 1x8000 on 8000x1, spent 0 milliseconds
+ONE THREAD MODE: 1x8000 on 8000x1, spent 0 milliseconds
+ONE THREAD MODE: 1x8000 on 8000x1, spent 0 milliseconds
+ONE THREAD MODE: 1x8000 on 8000x1, spent 0 milliseconds
+ONE THREAD MODE: 1x8000 on 8000x1, spent 0 milliseconds
+STATIC MODE (chunk size = 1) : 1x8000 on 8000x1, spent 0 milliseconds
+STATIC MODE (chunk size = 1) : 1x8000 on 8000x1, spent 0 milliseconds
+STATIC MODE (chunk size = 1) : 1x8000 on 8000x1, spent 0 milliseconds
+STATIC MODE (chunk size = 1) : 1x8000 on 8000x1, spent 0 milliseconds
+STATIC MODE (chunk size = 1) : 1x8000 on 8000x1, spent 16 milliseconds
+STATIC MODE (chunk size = 1) : 1x8000 on 8000x1, spent 0 milliseconds
+DYNAMIC MODE (chunk size = 1) : 1x8000 on 8000x1, spent 16 milliseconds
+DYNAMIC MODE (chunk size = 1) : 1x8000 on 8000x1, spent 0 milliseconds
+DYNAMIC MODE (chunk size = 1) : 1x8000 on 8000x1, spent 16 milliseconds
+DYNAMIC MODE (chunk size = 1) : 1x8000 on 8000x1, spent 0 milliseconds
+DYNAMIC MODE (chunk size = 1) : 1x8000 on 8000x1, spent 0 milliseconds
+DYNAMIC MODE (chunk size = 1) : 1x8000 on 8000x1, spent 0 milliseconds
+DYNAMIC MODE (chunk size = 1) : 1x8000 on 8000x1, spent 16 milliseconds
+GUIDED MODE (chunk size = 800) : 1x8000 on 8000x1, spent 0 milliseconds
+GUIDED MODE (chunk size = 800) : 1x8000 on 8000x1, spent 0 milliseconds
+GUIDED MODE (chunk size = 800) : 1x8000 on 8000x1, spent 0 milliseconds
+GUIDED MODE (chunk size = 800) : 1x8000 on 8000x1, spent 0 milliseconds
+GUIDED MODE (chunk size = 800) : 1x8000 on 8000x1, spent 0 milliseconds
+GUIDED MODE (chunk size = 800) : 1x8000 on 8000x1, spent 0 milliseconds
+ONE THREAD MODE: 1x600 on 600x300, spent 0 milliseconds
+ONE THREAD MODE: 1x600 on 600x300, spent 0 milliseconds
+ONE THREAD MODE: 1x600 on 600x300, spent 0 milliseconds
+ONE THREAD MODE: 1x600 on 600x300, spent 0 milliseconds
+ONE THREAD MODE: 1x600 on 600x300, spent 0 milliseconds
+ONE THREAD MODE: 1x600 on 600x300, spent 0 milliseconds
+STATIC MODE (chunk size = 1) : 1x600 on 600x300, spent 16 milliseconds
+STATIC MODE (chunk size = 1) : 1x600 on 600x300, spent 0 milliseconds
+STATIC MODE (chunk size = 1) : 1x600 on 600x300, spent 0 milliseconds
+STATIC MODE (chunk size = 1) : 1x600 on 600x300, spent 0 milliseconds
+STATIC MODE (chunk size = 1) : 1x600 on 600x300, spent 0 milliseconds
+DYNAMIC MODE (chunk size = 1) : 1x600 on 600x300, spent 0 milliseconds
+DYNAMIC MODE (chunk size = 1) : 1x600 on 600x300, spent 16 milliseconds
+DYNAMIC MODE (chunk size = 1) : 1x600 on 600x300, spent 16 milliseconds
+DYNAMIC MODE (chunk size = 1) : 1x600 on 600x300, spent 0 milliseconds
+DYNAMIC MODE (chunk size = 1) : 1x600 on 600x300, spent 0 milliseconds
+GUIDED MODE (chunk size = 1000) : 1x600 on 600x300, spent 0 milliseconds
+GUIDED MODE (chunk size = 1000) : 1x600 on 600x300, spent 0 milliseconds
+GUIDED MODE (chunk size = 1000) : 1x600 on 600x300, spent 0 milliseconds
+GUIDED MODE (chunk size = 1000) : 1x600 on 600x300, spent 0 milliseconds
+GUIDED MODE (chunk size = 1000) : 1x600 on 600x300, spent 16 milliseconds
+ONE THREAD MODE: 3000x4000 on 4000x2000, spent 257313 milliseconds
+ONE THREAD MODE: 3000x4000 on 4000x2000, spent 258593 milliseconds
+ONE THREAD MODE: 3000x4000 on 4000x2000, spent 256297 milliseconds
+ONE THREAD MODE: 3000x4000 on 4000x2000, spent 262625 milliseconds
+ONE THREAD MODE: 3000x4000 on 4000x2000, spent 258969 milliseconds
+STATIC MODE (chunk size = 1) : 3000x4000 on 4000x2000, spent 159703 milliseconds
+STATIC MODE (chunk size = 1) : 3000x4000 on 4000x2000, spent 162844 milliseconds
+STATIC MODE (chunk size = 1) : 3000x4000 on 4000x2000, spent 161281 milliseconds
+STATIC MODE (chunk size = 1) : 3000x4000 on 4000x2000, spent 164984 milliseconds
+STATIC MODE (chunk size = 1) : 3000x4000 on 4000x2000, spent 160594 milliseconds
+DYNAMIC MODE (chunk size = 1) : 3000x4000 on 4000x2000, spent 169437 milliseconds
+DYNAMIC MODE (chunk size = 1) : 3000x4000 on 4000x2000, spent 169953 milliseconds
+DYNAMIC MODE (chunk size = 1) : 3000x4000 on 4000x2000, spent 168266 milliseconds
+DYNAMIC MODE (chunk size = 1) : 3000x4000 on 4000x2000, spent 170438 milliseconds
+DYNAMIC MODE (chunk size = 1) : 3000x4000 on 4000x2000, spent 170344 milliseconds
+DYNAMIC MODE (chunk size = 1) : 3000x4000 on 4000x2000, spent 167219 milliseconds
+GUIDED MODE (chunk size = 200) : 3000x4000 on 4000x2000, spent 173218 milliseconds
+GUIDED MODE (chunk size = 200) : 3000x4000 on 4000x2000, spent 168734 milliseconds
+GUIDED MODE (chunk size = 200) : 3000x4000 on 4000x2000, spent 169765 milliseconds
+GUIDED MODE (chunk size = 200) : 3000x4000 on 4000x2000, spent 170281 milliseconds
+GUIDED MODE (chunk size = 200) : 3000x4000 on 4000x2000, spent 168875 milliseconds

@@ -5,21 +5,6 @@
 #include "utils.hpp"
 #include "multiply.hpp"
 
-void multiMatrixWithOneParallel(double** a, double** b, double** c);
-void multiMatrixWithTwoParallel(double** a, double** b, double** c);
-void multiMatrixWithThreeParallel(double** a, double** b, double** c);
-void multiMatrixWithOneParallel_4threads(double** a, double** b, double** c);
-void multiMatrixWithTwoParallel_4threads(double** a, double** b, double** c);
-void multiMatrixWithThreeParallel_4threads(double** a, double** b, double** c);
-void multiMatrixWithReductionSchedule_4threads(double** a, double** b, double** c);
-void multiMatrixWithReduction_4threads(double** a, double** b, double** c);
-void multiMatrixWith2Parallel_4threadsAndRed(double** a, double** b, double** c);
-
-ULONGLONG dwStart, time;
-int64_t rows1 = 1000;
-int64_t columns2 = 1500;
-int64_t inter21 = 2000;
-
 using namespace std;
 
 int main(int64_t argc, char* argv[]) {
