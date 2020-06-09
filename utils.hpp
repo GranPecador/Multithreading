@@ -1,75 +1,98 @@
+#include <tuple>
+#include <string>
 #include <fstream>
-#include <vector>
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
 namespace utils {
-	void createFileOfRandomNums(const string &filename, int64_t rows, int64_t columns) {
-		std::ofstream fileout(filename, ios_base::out | ios_base::trunc);
-		fileout << rows << " " << columns << endl;
-		for (int64_t i = 0; i < rows; i++) {
-			for (int64_t j = 0; j < columns; j++) {
-				fileout << (double)(rand()) / rand() << " ";
-			}
-			fileout << endl;
+
+	void generateInitX(const string& xsFilename, int rows, int initNum) {
+		ofstream xsFile(xsFilename, ios_base::trunc);
+		xsFile << rows << endl;
+		for (int i = 0; i < rows; i++) {
+			xsFile << initNum << endl;
 		}
-		fileout.close();
+		xsFile.close();
 	}
 
-	vector<vector<double>> loadMatrix(const string &filename) {
-		vector<vector<double>> matrix;
-		int64_t rows, columns;
-		ifstream file(filename);
-		if (!file) {
-			cerr << "Error opening file: " << filename << ".\n";
-			return matrix;
+	void generateMatrix(const string& matrixFilename, int rows) {
+		vector<vector<int>> matrix(rows, vector<int>((int)(rows+1), 0)); ;
+
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < rows + 1; j++) {
+				matrix[i][j] = rand();
+				matrix[i][i] += matrix[i][j];
+			}
+			matrix[i][i] = matrix[i][i] + 1;
 		}
-		file >> rows >> columns;
-		if (rows < 1 || columns < 1) {
+
+		ofstream matrixFile(matrixFilename, std::ios_base::trunc);
+		matrixFile << rows << " " << rows + 1 << endl;
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < (int)(rows+1); j++) {
+				matrixFile << matrix[i][j] << " ";
+			}
+			matrixFile << endl;
+		}
+		matrixFile.close();
+	}
+
+	tuple<int*,int*, double*, int> load(const string &matrixFilename, const string &xsFilename) {
+		int rows, columns, m;
+		ifstream matrixFile(matrixFilename);
+		ifstream xsFile(xsFilename);
+		if (!matrixFile || !xsFile) {
+			cerr << "Error opening file: " << matrixFilename <<" or "<< xsFilename << ".\n";
+			throw std::runtime_error("Can not open the file");
+		}
+		matrixFile >> rows >> columns;
+		if (rows < 1 || columns < 2) {
 			cerr << "The number of rows and columns must be greater than 0.\n";
-			return matrix;
+			throw std::runtime_error("Matrix size is invalid.");
 		}
-		matrix.resize(rows);
-		for (auto &row : matrix) {
-			row.resize(columns);
+		xsFile >> m;
+		if (rows != m) {
+			cerr << "The number of rows in the matrix should be equal to the number of rows x.\n";
+			throw std::runtime_error("The number of x is invalid.");
 		}
-		for (auto &row : matrix) {
-			for (auto &num : row) {
-				file >> num;
+		int* a = new int[rows * rows];
+		int* b = new int[rows];
+		double* xs = new double[rows];
+
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < rows; j++) {
+				matrixFile >> a[i*rows+j];
 			}
+			matrixFile >> b[i];
+			xsFile >> xs[i];
 		}
-		file.close();
-		return matrix;
+		matrixFile.close();
+		xsFile.close();
+		return make_tuple(a,b, xs,rows);
 	}
 
-	void writeInFileResult(vector<vector<double>> result) {
-		int64_t rows = result.size();
-		int64_t columns = result[0].size();
-		ofstream fileout("result.txt", ios_base::trunc);
-		fileout << rows << " " << columns << endl;
-		for (int64_t i = 0; i < rows; i++) {
-			for (int64_t j = 0; j < columns; j++) {
-				fileout << result[i][j] << " ";
-			}
-			fileout << std::endl;
-		}
-		fileout.close();
+	void printVector(char* title, double xLocal[], int n)
+	{
+			printf("%s\n", title);
+			for (int i = 0; i < n; i++)
+				printf("%4.1f ", xLocal[i]);
+			printf("\n");
 	}
 
-	void writeLogTime(string &str) {
+	void printResultInFile(const string& outFile, double* matrix, int n) {
+		ofstream fout(outFile);
+		fout << n << endl;
+		for (int i = 0; i < n; i++) {
+			fout << matrix[i] << std::endl;
+		}
+		fout.close();
+	}
+
+	void writeLogTime(string& str) {
 		std::ofstream filelog("Log.txt", std::ios::out | std::ios::app);
 		filelog << str;
 		filelog.close();
-	}
-
-	void printMatrix(std::vector<std::vector<double>> matrix) {
-		for (int i = 0; i < matrix.size(); i++) {
-			for (int j = 0; j < matrix.size(); j++) {
-				std::cout << matrix[i][j] << " ";
-			}
-			std::cout << std::endl;
-		}
-		std::cout << std::endl;
 	}
 }
