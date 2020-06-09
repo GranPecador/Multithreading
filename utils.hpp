@@ -8,7 +8,7 @@ using namespace std;
 
 namespace utils {
 
-	void generateInitX(const string& xsFilename, int rows, int initNum) {
+	void generateInitX(const string& xsFilename, int rows, double initNum) {
 		ofstream xsFile(xsFilename, ios_base::trunc);
 		xsFile << rows << endl;
 		for (int i = 0; i < rows; i++) {
@@ -18,7 +18,7 @@ namespace utils {
 	}
 
 	void generateMatrix(const string& matrixFilename, int rows) {
-		vector<vector<int>> matrix(rows, vector<int>((int)(rows+1), 0)); ;
+		vector<vector<double>> matrix(rows, vector<double>((int)(rows+1), 0)); ;
 
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < rows + 1; j++) {
@@ -39,7 +39,7 @@ namespace utils {
 		matrixFile.close();
 	}
 
-	tuple<int*,int*, double*, int> load(const string &matrixFilename, const string &xsFilename) {
+	tuple<double*, double*, double*, int> load(const string &matrixFilename, const string &xsFilename) {
 		int rows, columns, m;
 		ifstream matrixFile(matrixFilename);
 		ifstream xsFile(xsFilename);
@@ -57,8 +57,8 @@ namespace utils {
 			cerr << "The number of rows in the matrix should be equal to the number of rows x.\n";
 			throw std::runtime_error("The number of x is invalid.");
 		}
-		int* a = new int[rows * rows];
-		int* b = new int[rows];
+		double* a = new double[rows * rows];
+		double* b = new double[rows];
 		double* xs = new double[rows];
 
 		for (int i = 0; i < rows; i++) {
@@ -66,6 +66,7 @@ namespace utils {
 				matrixFile >> a[i*rows+j];
 			}
 			matrixFile >> b[i];
+			printf("%f  ", b[i]);
 			xsFile >> xs[i];
 		}
 		matrixFile.close();
