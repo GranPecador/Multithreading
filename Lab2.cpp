@@ -30,7 +30,6 @@ int main(int argc, char* argv[])
         double* aLocal, *bLocal;
         double* a = nullptr, *b = nullptr;
         double* xs = nullptr;
-        double* final_coeffs = nullptr;
 
         string matrixFile(argv[1]);
         string xInputFile(argv[2]);
@@ -39,15 +38,18 @@ int main(int argc, char* argv[])
 
 
         MPI_Init(&argc, &argv);
-        int rank, numprocs, maxIter = 100;
+        int rank, numprocs;
         MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
         MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
+        if (numprocs <= 1) {
+            throw "Need more than 1 process for completejob.";
+        }
+
         if (rank == 0) {
             tie(a,b, xs, n) = utils::load(matrixFile, xInputFile);
-            
         }
-        /* Запускаем таймер */
+        
         MPI_Barrier(MPI_COMM_WORLD);
         wtime = MPI_Wtime();
 
@@ -74,21 +76,17 @@ int main(int argc, char* argv[])
         }
         countsBLocal[numprocs - 1] += (n % numprocs);
         bLocal = new double[countsBLocal[rank]];
-        MPI_Scatterv(a, countsALocal, displacementsALocal, MPI_INT,
-            aLocal, countsALocal[rank], MPI_INT,
-            0, MPI_COMM_WORLD);
-       
-        MPI_Scatterv(b, countsBLocal, displacementsBLocal, MPI_INT,
-            bLocal, countsBLocal[rank], MPI_INT, 0, MPI_COMM_WORLD);
-        cout << "\n" << endl;
-        for (int i = 0; i < countsBLocal[rank]; i++) {
-            //printf("   %f   ", bLocal[i]);
-        }
+        MPI_Scatterv(a, countsALocal, displacementsALocal, MPI_DOUBLE,
+            aLocal, countsALocal[rank], MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
+        MPI_Scatterv(b, countsBLocal, displacementsBLocal, MPI_DOUBLE,
+            bLocal, countsBLocal[rank], MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
         jacobi::jacobi(n, countsBLocal[rank], aLocal,bLocal, xs, e, rank, numprocs, countsBLocal, displacementsBLocal);
 
         double* result = new double[n];
         MPI_Gatherv(xs, countsBLocal[rank], MPI_DOUBLE, result,countsBLocal,displacementsBLocal, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-        /* Вычисляем время работы */
+        
         MPI_Barrier(MPI_COMM_WORLD);
         wtime = MPI_Wtime() - wtime;
         if (rank == 0) {

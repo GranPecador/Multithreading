@@ -57,7 +57,7 @@ namespace utils {
 			cerr << "The number of rows in the matrix should be equal to the number of rows x.\n";
 			throw std::runtime_error("The number of x is invalid.");
 		}
-		double* a = new double[rows * rows];
+		double* a = new double[(long)rows*rows];
 		double* b = new double[rows];
 		double* xs = new double[rows];
 
@@ -66,7 +66,6 @@ namespace utils {
 				matrixFile >> a[i*rows+j];
 			}
 			matrixFile >> b[i];
-			printf("%f  ", b[i]);
 			xsFile >> xs[i];
 		}
 		matrixFile.close();
