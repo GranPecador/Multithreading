@@ -1,9 +1,9 @@
 #include <iostream>
 #include <tuple>
 #include <vector>
-#include "mpi.h"
 #include "utils.hpp"
 #include "Jacobi.hpp"
+#include "mpi.h"
 
 
 using namespace std;
@@ -93,7 +93,7 @@ int main(int argc, char* argv[])
             //utils::printVector((char*)"The solution is:", result, n);
             char buf[1000];
             int res = -1;
-            res = snprintf(buf, sizeof(buf), "Matrix A: order of system = %d, spent %f\n", n, wtime);
+            res = snprintf(buf, sizeof(buf), "Number of processes = %d, matrix A: order of system = %d, spent %f\n", numprocs, n, wtime);
             string str = "error!";
             if (res >= 0 && res < sizeof(buf))
                 str = buf;

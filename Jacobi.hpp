@@ -1,3 +1,4 @@
+#include "mpi.h"
 
 #define Swap(x,y) {double* temp; temp = x; x = y; y = temp; }
 
