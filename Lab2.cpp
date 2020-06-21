@@ -44,6 +44,7 @@ int main(int argc, char* argv[])
 
         if (numprocs <= 1) {
             throw "Need more than 1 process for completejob.";
+            MPI_Abort(MPI_COMM_WORLD, 1);
         }
 
         if (rank == 0) {
@@ -60,21 +61,32 @@ int main(int argc, char* argv[])
         MPI_Bcast(xs, n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
         
         nBar = n / numprocs;
+        int residue = n % numprocs;
         countsALocal = new int[numprocs];
         displacementsALocal = new int[numprocs];
         for (int p = 0; p < numprocs; p++) {
             countsALocal[p] = nBar *n;
             displacementsALocal[p] = p * nBar*n;
+            if (p<residue) {
+                countsALocal[p] += n;
+                displacementsALocal[p] += (p+1) * n;
+            }
+            //cout << "dispA: " << displacementsALocal[p] << endl;
         }
-        countsALocal[numprocs - 1] += (n % numprocs)*n;
+        //countsALocal[numprocs - 1] += (n % numprocs)*n;
         aLocal = new double[countsALocal[rank]];
         countsBLocal = new int[numprocs];
         displacementsBLocal = new int[numprocs];
         for (int p = 0; p < numprocs; p++) {
             countsBLocal[p] = nBar;
             displacementsBLocal[p] = p * nBar;
+            if (p < residue) {
+                countsBLocal[p] += 1;
+                displacementsBLocal[p] += p+1;
+            }
+            //cout << "dispB: " << displacementsBLocal[p] << endl;
         }
-        countsBLocal[numprocs - 1] += (n % numprocs);
+        //countsBLocal[numprocs - 1] += (n % numprocs);
         bLocal = new double[countsBLocal[rank]];
         MPI_Scatterv(a, countsALocal, displacementsALocal, MPI_DOUBLE,
             aLocal, countsALocal[rank], MPI_DOUBLE, 0, MPI_COMM_WORLD);
