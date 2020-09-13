@@ -3,14 +3,16 @@
 #include <fstream>
 #include <iostream>
 #include <random>
+#include <climits>
 
+#define INF INT32_MAX
 using namespace std;
 
 namespace utils {
-	using graph = vector<vector<pair<int, int>>>;
-	const int INF = INT_MAX;
 
-    void createFileAdjacencyMatrix(string filename, long nodesSize,  int minBorder, int maxBorder) {
+    using graph = vector<vector<pair<int, int>>>;
+
+    void createFileAdjacencyMatrix(string filename, int nodesSize,  int minBorder, int maxBorder) {
         ofstream file;
         random_device randomDevice;
         mt19937 generator(randomDevice());
@@ -21,8 +23,8 @@ namespace utils {
         for (auto& intra : matrix)
             intra.resize(nodesSize);
 
-        for (long i = 0; i < nodesSize; ++i) {
-            for (long j = i; j < nodesSize; ++j) {
+        for (int i = 0; i < nodesSize; ++i) {
+            for (int j = i; j < nodesSize; ++j) {
                 if (j == i) {
                     matrix[i][j] = 0;
                     continue;
@@ -53,40 +55,39 @@ namespace utils {
         }
     }
 
-	void loadMatrix(const string filename, graph& graph) {
+    void loadMatrix(const string filename, graph& graph) {
         long size;
-		string temp;
-		ifstream file(filename);
+        string temp;
+        ifstream file(filename);
         vector <int> matrix;
-		if (!file) {
-			cerr << "Error opening file: " << filename << ".\n";
-			throw runtime_error("Could not open the file");
-		}
-		file >> size;
-		graph.resize(size);
-		matrix.resize(size * size);
-		for (long i = 0; i < size; i++) {
-			for (long j = 0; j < size; j++) {
-				int index = i * size + j;
-				file >> temp;
-				if ("INF" == temp) {
-					matrix[index] = INF;
-				}
-				else {
-					matrix[index] = stoi(temp);
-				}
-			}
-		}
-		for (long i = 0; i < size; i++) {
-			for (long j = 0; j < size; j++) {
-				long index = i * size + j;
-				if (matrix[index] != INF) {
-					graph[i].push_back(make_pair(j, matrix[index]));
-				}
-			}
-		}
-	}
-
+        if (!file) {
+            cerr << "Error opening file: " << filename << ".\n";
+            throw runtime_error("Could not open the file");
+        }
+        file >> size;
+        graph.resize(size);
+        matrix.resize(size * size);
+        for (long i = 0; i < size; i++) {
+            for (long j = 0; j < size; j++) {
+                int index = i * size + j;
+                file >> temp;
+                if ("INF" == temp) {
+                    matrix[index] = INF;
+                }
+                else {
+                    matrix[index] = stoi(temp);
+                }
+            }
+        }
+        for (long i = 0; i < size; i++) {
+            for (long j = 0; j < size; j++) {
+                long index = i * size + j;
+                if (matrix[index] != INF) {
+                    graph[i].push_back(make_pair(j, matrix[index]));
+                }
+            }
+        }
+    }
     void printVector(const std::vector<int>& distances) {
         for (long i = 0; i < distances.size(); i++) {
             auto dist = distances[i] == INF ? "INF" : to_string(distances[i]);

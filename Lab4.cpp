@@ -6,7 +6,6 @@
 #include <windows.h>
 
 using namespace std;
-
 using graph = vector<vector<pair<int, int>>>;
 
 int main(int argc, char* argv[])
@@ -16,7 +15,7 @@ int main(int argc, char* argv[])
     } 
     else if (argc < 6) {
         cout << "Not all arguments specified!" << endl;
-        return (1);
+        return (10);
     }
     else {
         graph graph;
@@ -25,27 +24,27 @@ int main(int argc, char* argv[])
         int res = -1;
 
         string matrixFile = argv[1];
-        long startNode = atol(argv[2]);
+        int startNode = atol(argv[2]);
         string resultFile = argv[3];
         int threadNum = atoi(argv[4]);
         string mode = argv[5];
-        if (mode != "static" && mode != "dynamic") {
-            mode = "static";
+        if (mode != "static") {
+            mode = "reduction";
         }
         int chunkSize = argv[6] != nullptr ? atoi(argv[6]) : -1;
         omp_set_dynamic(0);
         omp_set_num_threads(threadNum);
 
         utils::loadMatrix(matrixFile, graph);
-        ULONGLONG startTime = GetTickCount64(), timeMultiply;
+        ULONGLONG startTime = GetTickCount(), timeMultiply;
         if (mode == "static") {
             distances = dijkstra::dijkstraStatic(graph, startNode, chunkSize);
         }
         else {
-            distances = dijkstra::dijkstraDynamic(graph, startNode, chunkSize);
+            distances = dijkstra::dijkstraReduction(graph, startNode, graph.size());
         }
-        timeMultiply = GetTickCount64() - startTime;
-        res = snprintf(buf, sizeof(buf), "%d threads: %s MODE: %I64d size, spent %I64d milliseconds\n", threadNum,mode, graph.size(),timeMultiply);
+        timeMultiply = GetTickCount() - startTime;
+        res = snprintf(buf, sizeof(buf), "%d threads: %s MODE: %Id size, spent %Id milliseconds\n", threadNum, mode.c_str(), distances.size(),timeMultiply);
         string str = "error!";
         if (res >= 0 && res < sizeof(buf))
             str = buf;
