@@ -49,28 +49,16 @@ namespace quicksort {
 			arrayLocalSize = last - first;
 			arrayLocal = new int[arrayLocalSize];
 			memcpy(arrayLocal, array, arrayLocalSize * sizeof(int));
-			/*
-			cout << "array_part process = " << rank << " : ";
-			for (int i = 0; i < array_size; i++) {
-				cout << array_working_part[i] << " ";
-			}
-			cout << endl << endl;
-			*/
+	
 			findPivotAndSwap(MPI_COMM_WORLD);
 			gatherSortArray(array, numsProcess);
 		}
 		else {
-			// wait initial data
+			// recive initial data
 			MPI_Recv(&arrayLocalSize, 1, MPI_INT, 0, SIZE, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			arrayLocal = new int[arrayLocalSize];
 			MPI_Recv(arrayLocal, arrayLocalSize, MPI_INT, 0, INIT, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-			/*
-			cout << "array_part process = "<<rank<<" : ";
-			for (int i = 0; i < array_size; i++) {
-				cout << array_working_part[i] << " ";
-			}
-			cout << endl << endl;
-			*/
+
 			findPivotAndSwap(MPI_COMM_WORLD);
 
 			// send result
@@ -88,8 +76,6 @@ namespace quicksort {
 		MPI_Comm_size(currentCommunicator, &currentSize);
 		bool mainProcess = currentRank == 0;
 
-		cout << "cur_size = " << currentSize << endl;
-
 		if (currentSize == 1) {
 			quicksort(arrayLocal, arrayLocalSize);
 			return;
@@ -104,21 +90,15 @@ namespace quicksort {
 			int randIndex = distribution(generator);
 			pivot = arrayLocal[randIndex];
 		}
-		// broadcast pivot
 		MPI_Bcast(&pivot, 1, MPI_INT, 0, currentCommunicator);
-		//cout << "pivot = " << pivot << endl;
-		// rearrange part
+		// rearrange
 		int i, j;
 		for (i = 0, j = arrayLocalSize - 1; i < j;) {
 			while (i < j && arrayLocal[i] < pivot) i++;
 			while (i < j && arrayLocal[j] >= pivot) j--;
 			std::swap(arrayLocal[i], arrayLocal[j]);
-			//cout << "swap: " << "i" <<" = "<<i<<" array_working_part[i] = "<< array_working_part[i] << endl;
-			//cout << "swap: " << "j" <<" = " << j << " array_working_part[j] = " << array_working_part[j] << endl;
-
 		}
 		splitPosition = i;
-		//cout << "split_pos = " << split_pos << endl;
 		
 		moveItemsInOrder(currentRank, currentCommunicator);
 
@@ -126,7 +106,6 @@ namespace quicksort {
 		MPI_Comm_split(currentCommunicator, currentRank & 1, 0, &newCommunicator);
 
 		order = 2 * order + (currentRank & 1);
-		cout << "order = " << order << endl;
 		
 		findPivotAndSwap(newCommunicator);
 	}
@@ -139,8 +118,6 @@ namespace quicksort {
 		int copyFrom;
 		int copyTo;
 		int sendFrom;
-
-		cout << "updateArr: " << " rank = " << rank << "   "  << endl;
 
 		if (high) {
 			neighbour = rank - neighbourDiff;
@@ -156,27 +133,13 @@ namespace quicksort {
 			copyFrom = 0;
 			copyTo = splitPosition;
 		}
-		cout << "neighbour: " << neighbour<<" ; send_size = " << sendSize << " ;  send_from  = "<< sendFrom << " ;  copy_from  = "<< copyFrom<< " ;  copy_to =  " << copyTo << endl;
-
-
-		MPI_Send(&sendSize, 1, MPI_INT, neighbour, SIZE, communicator);
 
 		int recvSize;
-		MPI_Recv(&recvSize, 1, MPI_INT, neighbour, SIZE, communicator, MPI_STATUS_IGNORE);
-
-		MPI_Send(arrayLocal + sendFrom, sendSize, MPI_INT, neighbour, ARRAY, communicator);
-
-		cout << "arrayPart: ";
-		for (int i = 0; i < arrayLocalSize; i++) {
-			cout << arrayLocal[i] << " ";
-		}
-		cout << endl;
-
+		MPI_Sendrecv(&sendSize, 1, MPI_INT, neighbour, SIZE, &recvSize, 1, MPI_INT, neighbour, SIZE, communicator, MPI_STATUS_IGNORE);
+		
 		int sizeTemp = recvSize + arrayLocalSize - sendSize;
-		cout << "sizeTemp = " << sizeTemp << endl;
 		int* newArray = new int[sizeTemp];
-		int j = 0;
-		MPI_Recv(newArray, recvSize, MPI_INT, neighbour, ARRAY, communicator, MPI_STATUS_IGNORE);
+		MPI_Sendrecv(arrayLocal + sendFrom, sendSize, MPI_INT, neighbour, ARRAY, newArray, recvSize, MPI_INT, neighbour, ARRAY, communicator, MPI_STATUS_IGNORE);
 
 		for (int i = copyFrom; i < copyTo; i++) {
 			int index = i - copyFrom + recvSize;
@@ -198,15 +161,12 @@ namespace quicksort {
 		counts[0] = arrayLocalSize;
 		displacements[0] = 0;
 
-		cout << "0" << "    " << arrayLocalSize << "   " << order << endl;
-
 		for (int process = 1, localSize, processOrder; process < size; process++) {
 			MPI_Recv(&localSize, 1, MPI_INT, process, SIZE, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			MPI_Recv(&processOrder, 1, MPI_INT, process, ORDER, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
 			counts[process] = localSize;
 			orders[process] = processOrder;
-			cout << process << "    " << localSize << "   " << processOrder << endl;
 		}
 
 		for (int processOrder = 0, offset = 0; processOrder < size; processOrder++) {

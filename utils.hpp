@@ -24,7 +24,6 @@ namespace utils {
 			file >> nums[i];
 
 		}
-		//nums[size] = INT_MAX;
 		file.close();
 		return make_tuple(nums, size);
 	}
@@ -49,7 +48,7 @@ namespace utils {
 		ofstream fout(outFile, ios_base::trunc);
 		fout << "Size: " << numsSize << std::endl;
 		for (int i = 0; i < numsSize; i++)
-			printf("%3i ", nums[i]);
+			fout << nums[i] << " ";
 		fout.close();
 	}
 }
